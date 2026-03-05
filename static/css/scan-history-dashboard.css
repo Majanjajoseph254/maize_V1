@@ -1,0 +1,586 @@
+/**
+ * Scan History Dashboard Styles
+ * =============================
+ * High-contrast, tactile design for viewing scan history offline
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTAINER & HEADER
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-history-container {
+    width: 100%;
+    padding: 0;
+}
+
+.scan-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #D0D0D0;
+}
+
+.scan-history-header h2 {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #000000;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.scan-export-btn {
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 0.9rem;
+}
+
+.scan-export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
+}
+
+.scan-export-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(16, 185, 129, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATISTICS CARDS
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.scan-stat-card {
+    background: linear-gradient(135deg, #FFFFFF, #F3F4F6);
+    border: 3px solid #D0D0D0;
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.scan-stat-card .stat-icon {
+    font-size: 1.5rem;
+}
+
+.scan-stat-card .stat-data {
+    flex: 1;
+}
+
+.scan-stat-card .stat-value {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #000000;
+    margin: 0;
+    line-height: 1;
+}
+
+.scan-stat-card .stat-label {
+    font-size: 0.75rem;
+    color: #666666;
+    margin: 3px 0 0 0;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FILTERS SECTION
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-filters-section {
+    background: linear-gradient(135deg, #F8F9FA, #FFFFFF);
+    border: 2px solid #D0D0D0;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 20px;
+}
+
+.scan-filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filter-group label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #333333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.scan-filter-select {
+    padding: 10px 12px;
+    border: 2px solid #D0D0D0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: #000000;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.scan-filter-select:hover {
+    border-color: #0A5F2F;
+}
+
+.scan-filter-select:focus {
+    outline: none;
+    border-color: #0A5F2F;
+    box-shadow: 0 0 0 3px rgba(10, 95, 47, 0.1);
+}
+
+.filter-search {
+    grid-column: span 2;
+}
+
+.scan-filter-search {
+    padding: 10px 12px;
+    border: 2px solid #D0D0D0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.scan-filter-search:focus {
+    outline: none;
+    border-color: #0A5F2F;
+    box-shadow: 0 0 0 3px rgba(10, 95, 47, 0.1);
+}
+
+.scan-filter-clear {
+    padding: 10px 14px;
+    background: #E5E7EB;
+    color: #333333;
+    border: 2px solid #333333;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 0.85rem;
+}
+
+.scan-filter-clear:hover {
+    background: #D1D5DB;
+    transform: translateY(-1px);
+}
+
+.scan-filter-clear:active {
+    transform: translateY(0);
+}
+
+.filter-results-count {
+    font-size: 0.8rem;
+    color: #666666;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCAN LIST & CARDS
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.scan-card {
+    background: linear-gradient(135deg, #FFFFFF, #F8F9FA);
+    border: 3px solid #D0D0D0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+.scan-card:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Confidence-based card styling */
+.scan-card-high {
+    border-left: 6px solid #10B981;
+}
+
+.scan-card-medium {
+    border-left: 6px solid #F0B000;
+}
+
+.scan-card-low {
+    border-left: 6px solid #DC3545;
+}
+
+.scan-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
+.scan-disease-info {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+.scan-disease-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.scan-disease-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #000000;
+    margin: 0 0 4px 0;
+}
+
+.scan-summary {
+    font-size: 0.85rem;
+    color: #666666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.scan-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-size: 0.8rem;
+    color: #666666;
+    white-space: nowrap;
+}
+
+.scan-date {
+    font-weight: 700;
+}
+
+.scan-time {
+    opacity: 0.8;
+}
+
+/* Confidence Bar */
+.scan-card-body {
+    margin-bottom: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #E5E7EB;
+}
+
+.scan-confidence {
+    margin-bottom: 0;
+}
+
+.confidence-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+}
+
+.confidence-label {
+    font-weight: 700;
+    color: #333333;
+}
+
+.confidence-value {
+    font-weight: 900;
+    color: #000000;
+}
+
+.confidence-bar {
+    height: 16px;
+    background: linear-gradient(90deg, #DC3545, #F0B000, #10B981);
+    border: 2px solid #000000;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: inset -1px -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.8), rgba(240, 176, 0, 0.8), rgba(16, 185, 129, 0.8));
+    transition: width 0.5s ease;
+    border-radius: 6px;
+}
+
+/* Treatment Info */
+.scan-treatment {
+    background: linear-gradient(135deg, #FFF3CD 0%, #FFFACD 100%);
+    border: 2px solid #F0B000;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.treatment-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #B8860B;
+    margin: 0 0 8px 0;
+}
+
+.treatment-content {
+    font-size: 0.85rem;
+    color: #333333;
+}
+
+.treatment-content p {
+    margin: 4px 0;
+    line-height: 1.4;
+}
+
+/* Card Footer */
+.scan-card-footer {
+    display: flex;
+    gap: 8px;
+}
+
+.scan-action-btn {
+    flex: 1;
+    padding: 10px;
+    background: linear-gradient(135deg, #E5E7EB, #D1D5DB);
+    color: #000000;
+    border: 2px solid #333333;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.scan-action-btn:hover {
+    background: linear-gradient(135deg, #D1D5DB, #B3B9C1);
+    transform: translateY(-1px);
+}
+
+.scan-action-btn:active {
+    transform: translateY(0);
+}
+
+.scan-action-delete:hover {
+    background: linear-gradient(135deg, #FFE5E5, #FFC0C0);
+    color: #DC3545;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMPTY STATE
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-history-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #F8F9FA, #FFFFFF);
+    border: 3px dashed #D0D0D0;
+    border-radius: 12px;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.scan-history-empty h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #000000;
+    margin: 0 0 8px 0;
+}
+
+.scan-history-empty p {
+    font-size: 0.95rem;
+    color: #666666;
+    margin: 0 0 20px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOADING & ERROR STATES
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-history-loading,
+.scan-history-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666666;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #D0D0D0;
+    border-top-color: #10B981;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.scan-history-error h3 {
+    color: #000000;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════════════ */
+
+.scan-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.scan-detail-content {
+    background: #FFFFFF;
+    border: 3px solid #000000;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scan-detail-content h2 {
+    margin-top: 0;
+    color: #000000;
+}
+
+.scan-detail-content p {
+    margin: 8px 0;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE: Mobile optimization
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .scan-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .scan-filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-search {
+        grid-column: span 1;
+    }
+
+    .scan-card-header {
+        flex-direction: column;
+    }
+
+    .scan-meta {
+        align-items: flex-start;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 480px) {
+    .scan-history-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .scan-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .scan-filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .scan-action-btn {
+        font-size: 0.75rem;
+        padding: 8px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-contrast: more) {
+    .scan-card {
+        border-width: 4px;
+    }
+
+    .scan-action-btn {
+        border-width: 3px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

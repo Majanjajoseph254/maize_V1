@@ -1,0 +1,737 @@
+/**
+ * AgroWeatherWidget Styles
+ * =========================
+ * Tactile Maximalism: 3D depth, soft shadows, high contrast for outdoor mobile viewing
+ * Designed for readability in direct sunlight with satisfying tactile feedback
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTAINER & BASE
+   ═══════════════════════════════════════════════════════════════ */
+
+#agro-weather-widget {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.agro-weather-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
+    border-radius: 16px;
+    border: 3px solid #000000;
+    padding: 20px;
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+.agro-weather-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 20% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(240, 176, 0, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.agro-weather-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER: Location & Refresh
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-weather-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #D0D0D0;
+}
+
+.agro-location {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.agro-icon {
+    font-size: 1.5rem;
+}
+
+.agro-location-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #000000;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.agro-update-time {
+    font-size: 0.75rem;
+    color: #666666;
+    margin: 4px 0 0 0;
+}
+
+.agro-refresh-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10B981, #059669);
+    border: 3px solid #000000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 4px 12px rgba(16, 185, 129, 0.2),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.agro-refresh-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 6px 16px rgba(16, 185, 129, 0.3),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.agro-refresh-btn:active {
+    transform: scale(0.98);
+    box-shadow: 
+        0 2px 4px rgba(16, 185, 129, 0.15),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ALERTS: Critical Warnings
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-alert {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 3px solid;
+    margin-bottom: 16px;
+    font-weight: 600;
+    align-items: flex-start;
+}
+
+.agro-alert-critical {
+    background: linear-gradient(135deg, #FFF5F5, #FFEBEE);
+    border-color: #DC3545;
+    color: #DC3545;
+}
+
+.alert-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    animation: pulse-alert 2s ease-in-out infinite;
+}
+
+@keyframes pulse-alert {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content strong {
+    display: block;
+    font-size: 0.95rem;
+}
+
+.alert-content p {
+    font-size: 0.85rem;
+    margin: 4px 0 0 0;
+    opacity: 0.9;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONDITIONS GRID: Temp, Humidity, Rainfall, GDD
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.agro-condition-card {
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid #D0D0D0;
+    background: linear-gradient(135deg, #FFFFFF, #F3F4F6);
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.08),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.agro-condition-card:active {
+    transform: translateY(1px);
+    box-shadow: 
+        0 1px 4px rgba(0, 0, 0, 0.06),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* Temperature Card */
+.agro-temp-card {
+    grid-column: span 2;
+}
+
+.condition-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.condition-icon {
+    font-size: 2.5rem;
+}
+
+.condition-data {
+    flex: 1;
+}
+
+.condition-temp {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.temp-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #000000;
+    line-height: 1;
+}
+
+.temp-unit {
+    font-size: 0.9rem;
+    color: #333333;
+    font-weight: 600;
+}
+
+.condition-label {
+    font-size: 0.85rem;
+    color: #666666;
+    margin: 4px 0 0 0;
+    text-transform: capitalize;
+}
+
+.condition-meta {
+    text-align: right;
+}
+
+.temp-range {
+    font-size: 0.85rem;
+    color: #666666;
+    font-weight: 600;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.temp-max {
+    color: #DC3545;
+}
+
+.temp-min {
+    color: #0066CC;
+}
+
+.meta-sep {
+    color: #999999;
+}
+
+/* GDD Card */
+.agro-gdd-card {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #D4EDDA 0%, #C3E6CB 100%);
+    border-color: #10B981;
+    padding: 16px;
+}
+
+.gdd-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.gdd-icon {
+    font-size: 2rem;
+}
+
+.gdd-info {
+    flex: 1;
+}
+
+.gdd-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #0A5F2F;
+    margin: 0;
+    line-height: 1;
+}
+
+.gdd-label {
+    font-size: 0.75rem;
+    color: #0A5F2F;
+    opacity: 0.8;
+    margin: 2px 0 0 0;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.gdd-stage {
+    font-size: 0.85rem;
+    color: #0A5F2F;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Humidity & Rain Cards */
+.agro-humidity-card,
+.agro-rain-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.condition-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #000000;
+    margin: 0;
+    line-height: 1;
+}
+
+.condition-label {
+    font-size: 0.8rem;
+    color: #666666;
+    margin: 2px 0 0 0;
+}
+
+.rain-chance {
+    font-size: 0.75rem;
+    color: #666666;
+    margin: 2px 0 0 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SOIL MOISTURE METER: Visual moisture indicator
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-moisture-section {
+    background: linear-gradient(135deg, #FFF8E1, #FFFACD);
+    border: 2px solid #F0B000;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+}
+
+.moisture-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.moisture-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+}
+
+.moisture-value {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #10B981;
+    margin: 0;
+}
+
+.moisture-value.critical {
+    color: #DC3545;
+    animation: blink-critical 1s ease-in-out infinite;
+}
+
+@keyframes blink-critical {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Moisture Bar */
+.moisture-bar {
+    height: 20px;
+    background: linear-gradient(90deg, #DC3545 0%, #FFC107 50%, #10B981 100%);
+    border: 2px solid #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.moisture-fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.8), rgba(240, 176, 0, 0.8), rgba(16, 185, 129, 0.8));
+    border-radius: 8px;
+    transition: width 0.6s ease;
+    box-shadow: inset 1px 0 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Moisture Zones */
+.moisture-zones {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.zone {
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex: 1;
+    text-align: center;
+    margin: 0 2px;
+}
+
+.zone.critical {
+    background: rgba(220, 53, 69, 0.15);
+    color: #DC3545;
+}
+
+.zone.warning {
+    background: rgba(255, 193, 7, 0.15);
+    color: #FFC107;
+}
+
+.zone.optimal {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+}
+
+.zone.caution {
+    background: rgba(0, 102, 204, 0.15);
+    color: #0066CC;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FORECAST: 5-Day outlook
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-forecast-section {
+    margin-bottom: 16px;
+}
+
+.forecast-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #000000;
+    margin: 0 0 10px 0;
+}
+
+.agro-forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.forecast-card {
+    padding: 12px;
+    background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+    border: 2px solid #D0D0D0;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+.forecast-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.forecast-day {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 4px 0;
+}
+
+.forecast-icon {
+    font-size: 1.5rem;
+    margin: 4px 0;
+}
+
+.forecast-temp {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #000000;
+    margin: 4px 0;
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+}
+
+.forecast-high {
+    color: #DC3545;
+}
+
+.forecast-low {
+    color: #0066CC;
+}
+
+.forecast-rain {
+    font-size: 0.7rem;
+    color: #666666;
+    margin: 4px 0 0 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACTION BUTTONS: Tactile, high-contrast
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-actions {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.agro-action-btn {
+    padding: 14px;
+    border-radius: 10px;
+    border: 3px solid #000000;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.agro-btn-urgent {
+    background: linear-gradient(135deg, #DC3545, #C82333);
+    color: #FFFFFF;
+    border-color: #8B1A1A;
+    box-shadow: 
+        0 4px 12px rgba(220, 53, 69, 0.25),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.agro-btn-urgent:hover {
+    box-shadow: 
+        0 6px 16px rgba(220, 53, 69, 0.35),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.agro-btn-urgent:active {
+    box-shadow: 
+        0 1px 3px rgba(220, 53, 69, 0.15),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+}
+
+.agro-btn-secondary {
+    background: linear-gradient(135deg, #E5E7EB, #D1D5DB);
+    color: #000000;
+    border-color: #333333;
+    box-shadow: 
+        0 3px 8px rgba(0, 0, 0, 0.1),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.agro-btn-secondary:hover {
+    background: linear-gradient(135deg, #D1D5DB, #B3B9C1);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.agro-btn-secondary:active {
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.08),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.06);
+    transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOADING & ERROR STATES
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-weather-loading,
+.agro-weather-error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666666;
+}
+
+.agro-weather-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #D0D0D0;
+    border-top-color: #10B981;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+.agro-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 2px solid;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    animation: slideUp 0.3s ease;
+    max-width: 300px;
+}
+
+.agro-toast-info {
+    background: #E3F2FD;
+    border-color: #0066CC;
+    color: #0066CC;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE: Mobile optimization
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .agro-weather-card {
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    .agro-conditions-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .agro-temp-card,
+    .agro-gdd-card {
+        grid-column: span 1;
+    }
+
+    .agro-humidity-card,
+    .agro-rain-card {
+        grid-template-columns: 1fr;
+    }
+
+    .agro-forecast-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .agro-actions {
+        flex-direction: column;
+    }
+
+    .agro-toast {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .agro-weather-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .agro-refresh-btn {
+        align-self: flex-end;
+    }
+
+    .agro-forecast-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY: High contrast mode support
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-contrast: more) {
+    .agro-weather-card {
+        border-width: 4px;
+    }
+
+    .agro-condition-card,
+    .forecast-card {
+        border-width: 3px;
+    }
+
+    .agro-action-btn {
+        border-width: 4px;
+        font-weight: 900;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

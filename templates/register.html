@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#16a34a">
+    <meta name="description" content="Create a secure KilimoSmart account with strong password protection.">
+    <title>Create account – KilimoSmart</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌽</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .fl-group input::placeholder {
+            color: transparent;
+        }
+        .fl-group input:-ms-input-placeholder {
+            color: transparent;
+        }
+        .fl-group input::-ms-input-placeholder {
+            color: transparent;
+        }
+        .spin {
+            border-top-color: rgba(22, 163, 74, 1);
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#f9f5ee] flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-8 rounded-3xl bg-[#fdfaf4] shadow-[0_24px_80px_rgba(15,23,42,0.16)] border border-[#e5ddcf] overflow-hidden">
+        <!-- Left: Form -->
+        <div class="px-6 sm:px-10 py-8 sm:py-10">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="h-11 w-11 rounded-2xl bg-gradient-to-tr from-[#2f7f4f] to-[#9ecf4e] flex items-center justify-center shadow-inner">
+                    <span class="text-2xl">🌽</span>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.22em] text-emerald-700/80">
+                        KilimoSmart
+                    </p>
+                    <p class="text-xs text-slate-500">
+                        Maize Intelligence Platform
+                    </p>
+                </div>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 mb-1">
+                Create your KilimoSmart account
+            </h1>
+            <p class="text-sm text-slate-600 mb-6 sm:mb-8 max-w-md">
+                Set up a secure profile to track maize health, yields and market options for your farm or cooperative.
+            </p>
+
+            <!-- Global error (server-rendered) -->
+            {% if error %}
+            <div id="globalError" class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs text-red-700 flex items-start gap-2">
+                <span class="mt-0.5 text-sm">⚠</span>
+                <div>
+                    <p class="font-medium">We couldn’t create your account.</p>
+                    <p>{{ error }}</p>
+                </div>
+            </div>
+            {% else %}
+            <div id="globalError"></div>
+            {% endif %}
+
+            <form id="registerForm" method="POST" class="space-y-4" onsubmit="handleRegister(event)">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Name -->
+                    <div class="fl-group relative">
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            required
+                            autofocus
+                            placeholder="Full name"
+                            class="peer block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 pt-4 pb-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        >
+                        <label
+                            for="name"
+                            class="pointer-events-none absolute left-3.5 top-3.5 text-sm text-slate-400 transition-all
+                                   peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-emerald-700
+                                   peer-valid:top-2.5 peer-valid:text-[11px] peer-valid:text-slate-500">
+                            Full name
+                        </label>
+                    </div>
+
+                    <!-- County -->
+                    <div class="fl-group relative">
+                        <select
+                            id="county"
+                            name="county"
+                            required
+                            class="block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 py-3 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        >
+                            <option value="" disabled selected>Select county</option>
+                            <option value="Embu">Embu</option>
+                            <option value="Kiambu">Kiambu</option>
+                            <option value="Uasin Gishu">Uasin Gishu</option>
+                            <option value="Trans-Nzoia">Trans-Nzoia</option>
+                            <option value="Nakuru">Nakuru</option>
+                            <option value="Bungoma">Bungoma</option>
+                            <option value="Kakamega">Kakamega</option>
+                        </select>
+                        <label
+                            for="county"
+                            class="pointer-events-none absolute left-3.5 -top-2 text-[11px] px-1 rounded bg-[#fdfaf4] text-slate-500">
+                            County
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="fl-group relative">
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autocomplete="email"
+                        required
+                        placeholder="Email address"
+                        class="peer block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 pt-4 pb-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                    >
+                    <label
+                        for="email"
+                        class="pointer-events-none absolute left-3.5 top-3.5 text-sm text-slate-400 transition-all
+                               peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-emerald-700
+                               peer-valid:top-2.5 peer-valid:text-[11px] peer-valid:text-slate-500">
+                        Email address
+                    </label>
+                </div>
+
+                <!-- Password with strength meter -->
+                <div>
+                    <div class="fl-group relative">
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                            minlength="8"
+                            placeholder="Password"
+                            oninput="updatePasswordStrength()"
+                            class="peer block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 pt-4 pb-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                        >
+                        <label
+                            for="password"
+                            class="pointer-events-none absolute left-3.5 top-3.5 text-sm text-slate-400 transition-all
+                                   peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-emerald-700
+                                   peer-valid:top-2.5 peer-valid:text-[11px] peer-valid:text-slate-500">
+                            Password
+                        </label>
+                    </div>
+
+                    <!-- Strength bar -->
+                    <div id="strengthContainer" class="mt-2 hidden">
+                        <div class="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                            <div id="strengthBar" class="h-full rounded-full transition-all duration-300 w-0 bg-red-400"></div>
+                        </div>
+                        <p id="strengthLabel" class="mt-1 text-[11px] text-slate-500">
+                            Password strength: <span class="font-medium text-slate-700">Weak</span>
+                        </p>
+
+                        <!-- Checklist -->
+                        <ul class="mt-2 space-y-1 text-[11px] text-slate-600">
+                            <li id="rule-length" class="flex items-center gap-2">
+                                <span class="flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[9px] text-slate-400">✕</span>
+                                <span>At least 8 characters</span>
+                            </li>
+                            <li id="rule-upper" class="flex items-center gap-2">
+                                <span class="flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[9px] text-slate-400">✕</span>
+                                <span>One uppercase letter</span>
+                            </li>
+                            <li id="rule-number" class="flex items-center gap-2">
+                                <span class="flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[9px] text-slate-400">✕</span>
+                                <span>One number</span>
+                            </li>
+                            <li id="rule-special" class="flex items-center gap-2">
+                                <span class="flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[9px] text-slate-400">✕</span>
+                                <span>One special character</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Confirm password -->
+                <div class="fl-group relative">
+                    <input
+                        id="confirm_password"
+                        name="confirm_password"
+                        type="password"
+                        autocomplete="new-password"
+                        required
+                        placeholder="Confirm password"
+                        oninput="clearGlobalError()"
+                        class="peer block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 pt-4 pb-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                    >
+                    <label
+                        for="confirm_password"
+                        class="pointer-events-none absolute left-3.5 top-3.5 text-sm text-slate-400 transition-all
+                               peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-emerald-700
+                               peer-valid:top-2.5 peer-valid:text-[11px] peer-valid:text-slate-500">
+                        Confirm password
+                    </label>
+                </div>
+
+                <div class="flex items-start gap-2 text-[11px] text-slate-600">
+                    <input
+                        id="tos"
+                        type="checkbox"
+                        class="mt-[3px] h-3.5 w-3.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        required
+                    >
+                    <label for="tos">
+                        I agree to the
+                        <a href="#" class="underline underline-offset-2 text-emerald-700">terms of use</a>
+                        and
+                        <a href="#" class="underline underline-offset-2 text-emerald-700">data privacy policy</a>.
+                    </label>
+                </div>
+
+                <button
+                    type="submit"
+                    id="submitBtn"
+                    class="mt-1 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-600 to-lime-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdfaf4] transition-all"
+                >
+                    Create account
+                </button>
+
+                <p class="pt-3 text-xs text-slate-600 text-center">
+                    Already have an account?
+                    <a href="/login" class="font-medium text-emerald-700 hover:text-emerald-800">
+                        Sign in
+                    </a>
+                </p>
+            </form>
+        </div>
+
+        <!-- Right: Benefits -->
+        <aside class="hidden md:flex flex-col justify-between bg-gradient-to-br from-[#16361f] via-[#20472a] to-[#2e5d37] text-[#f5f0e4] px-8 py-9 relative">
+            <div class="absolute inset-0 opacity-[0.12] pointer-events-none mix-blend-soft-light bg-[radial-gradient(circle_at_top,_#f6e4b1_0,_transparent_55%),_radial-gradient(circle_at_bottom,_#a6d57b_0,_transparent_60%)]"></div>
+            <div class="relative">
+                <p class="text-[10px] font-medium uppercase tracking-[0.22em] text-emerald-50/70 mb-3">
+                    Trusted AgTech partner
+                </p>
+                <h2 class="text-lg font-semibold leading-snug mb-3">
+                    Built for smallholder farmers and maize cooperatives.
+                </h2>
+                <p class="text-xs text-emerald-50/85 mb-6 max-w-sm">
+                    Your account keeps farm data, diagnoses and market history in one place, protected with strong passwords and two‑factor authentication.
+                </p>
+            </div>
+
+            <div class="relative space-y-3 text-[11px] text-emerald-50/85">
+                <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-900/40 flex items-center justify-center text-[11px]">
+                        ✓
+                    </div>
+                    <p>Strong password policy with live feedback as you type.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-900/40 flex items-center justify-center text-[11px]">
+                        ✓
+                    </div>
+                    <p>Secure authentication ready for two‑factor protection.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-900/40 flex items-center justify-center text-[11px]">
+                        ✓
+                    </div>
+                    <p>Designed for low bandwidth and offline resilience.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        function setGlobalError(message) {
+            const container = document.getElementById('globalError');
+            if (!message) {
+                container.innerHTML = '';
+                return;
+            }
+            container.innerHTML = `
+                <div class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs text-red-700 flex items-start gap-2">
+                    <span class="mt-0.5 text-sm">⚠</span>
+                    <div>
+                        <p class="font-medium">We couldn’t create your account.</p>
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function clearGlobalError() {
+            setGlobalError(null);
+        }
+
+        function evaluatePassword(pwd) {
+            const rules = {
+                length: pwd.length >= 8,
+                upper: /[A-Z]/.test(pwd),
+                number: /\d/.test(pwd),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(pwd),
+            };
+            const score = Object.values(rules).filter(Boolean).length;
+            return { rules, score };
+        }
+
+        function updatePasswordStrength() {
+            const pwd = document.getElementById('password').value;
+            const container = document.getElementById('strengthContainer');
+            const bar = document.getElementById('strengthBar');
+            const label = document.getElementById('strengthLabel').querySelector('span');
+
+            if (!pwd) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            const { rules, score } = evaluatePassword(pwd);
+            const percent = (score / 4) * 100;
+
+            bar.style.width = percent + '%';
+            let color = 'bg-red-400';
+            let text = 'Weak';
+            if (score === 2) { color = 'bg-amber-400'; text = 'Fair'; }
+            if (score === 3) { color = 'bg-lime-400'; text = 'Good'; }
+            if (score === 4) { color = 'bg-emerald-500'; text = 'Strong'; }
+            bar.className = 'h-full rounded-full transition-all duration-300 ' + color;
+            label.textContent = text;
+
+            function setRule(id, ok) {
+                const li = document.getElementById('rule-' + id);
+                if (!li) return;
+                const badge = li.querySelector('span');
+                const textEl = li.querySelectorAll('span')[1];
+                if (ok) {
+                    badge.textContent = '✓';
+                    badge.className = 'flex h-4 w-4 items-center justify-center rounded-full border border-emerald-500 bg-emerald-500 text-[9px] text-white';
+                    textEl.className = 'text-emerald-700';
+                } else {
+                    badge.textContent = '✕';
+                    badge.className = 'flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[9px] text-slate-400';
+                    textEl.className = '';
+                }
+            }
+
+            setRule('length', rules.length);
+            setRule('upper', rules.upper);
+            setRule('number', rules.number);
+            setRule('special', rules.special);
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            clearGlobalError();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const county = document.getElementById('county').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (!name || !email || !county) {
+                setGlobalError('Name, email and county are required.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                setGlobalError('Passwords do not match. Please confirm your password.');
+                return;
+            }
+
+            const evaluation = evaluatePassword(password);
+            if (evaluation.score < 4) {
+                setGlobalError('Please meet all password requirements before continuing.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="inline-block h-3.5 w-3.5 rounded-full border border-slate-200 border-t-emerald-500 spin mr-2 align-middle"></span>
+                Creating account…
+            `;
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        county,
+                        password,
+                        confirm_password: confirmPassword,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = data.redirect || '/';
+                } else {
+                    setGlobalError(data.error || 'Registration failed. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create account';
+                }
+            } catch (err) {
+                console.error('Registration error:', err);
+                setGlobalError('Network error. Please check your connection and try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create account';
+            }
+        }
+    </script>
+</body>
+</html>

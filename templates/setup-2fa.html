@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+    <title>Setup 2FA – KilimoSmart</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌽</text></svg>">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0F1419 0%, #1A1F2E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .auth-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
+            border: 3px solid #D0D0D0;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-header h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #000000;
+            margin: 0 0 8px 0;
+        }
+
+        .auth-header p {
+            color: #666666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .setup-section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .qr-container {
+            background: #FFFFFF;
+            border: 2px solid #D0D0D0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        #qr-code-img {
+            max-width: 100%;
+            border: 2px solid #0A5F2F;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .secret-display {
+            background: #F3F4F6;
+            border: 2px solid #D0D0D0;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #000000;
+            word-break: break-all;
+            margin-bottom: 8px;
+        }
+
+        .copy-btn {
+            padding: 8px 12px;
+            background: #10B981;
+            color: #FFFFFF;
+            border: 2px solid #000000;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .info-box {
+            background: #E5F9FF;
+            border-left: 4px solid #0A5F2F;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: #333333;
+            line-height: 1.5;
+        }
+
+        .info-box strong {
+            color: #000000;
+        }
+
+        .setup-instructions {
+            background: #FFF3CD;
+            border: 2px solid #F0B000;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+
+        .setup-instructions ol {
+            margin: 0;
+            padding-left: 20px;
+            color: #333333;
+            font-size: 0.95rem;
+        }
+
+        .setup-instructions li {
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: #FFFFFF;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #E0E0E0;
+            border-top-color: #FFFFFF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #E0E0E0;
+        }
+
+        .auth-footer a {
+            color: #10B981;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 24px;
+            }
+
+            .auth-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .setup-instructions {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🔐 Enable 2FA</h1>
+                <p>Secure your KilimoSmart account</p>
+            </div>
+
+            <div class="setup-instructions">
+                <strong style="color: #B8860B;">⚠️ Setup Required</strong><br>
+                Two-Factor Authentication protects your farm data. Follow these steps:
+                <ol>
+                    <li><strong>Install an authenticator app</strong> (Google Authenticator, Microsoft Authenticator, or Authy)</li>
+                    <li><strong>Scan the QR code</strong> with your app</li>
+                    <li><strong>Enter the 6-digit code</strong> shown in your app to confirm</li>
+                </ol>
+            </div>
+
+            <form id="setupForm" onsubmit="handleSetup(event)">
+                <!-- QR Code Section -->
+                <div class="setup-section">
+                    <div class="section-title">1️⃣ QR Code</div>
+                    <div class="qr-container">
+                        <div id="qr-loading" style="text-align: center; color: #666;">
+                            <p>Generating QR code...</p>
+                        </div>
+                        <img id="qr-code-img" style="display: none;" alt="2FA QR Code">
+                    </div>
+                </div>
+
+                <!-- Secret Key Section -->
+                <div class="setup-section">
+                    <div class="section-title">2️⃣ Or Enter Code Manually</div>
+                    <div class="info-box">
+                        Can't scan? Enter this code in your authenticator app:
+                    </div>
+                    <div class="secret-display" id="secretDisplay">Loading...</div>
+                    <button type="button" class="copy-btn" onclick="copySecret(this)">
+                        📋 Copy Code
+                    </button>
+                </div>
+
+                <!-- Verify Section -->
+                <div class="setup-section">
+                    <div class="section-title">3️⃣ Verify Your Setup</div>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 12px;">
+                        Enter the 6-digit code from your authenticator app to confirm:
+                    </p>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    ✓ Continue to Verification
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p style="margin: 0; color: #666;">Your authenticator app is ready?</p>
+                <p style="margin: 8px 0 0 0;"><a href="/2fa/verify">Proceed to Verification →</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSecret = null;
+
+        async function handleSetup(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Preparing...';
+            
+            try {
+                const response = await fetch('/2fa/setup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentSecret = data.secret;
+                    
+                    // Display secret
+                    document.getElementById('secretDisplay').textContent = data.secret;
+                    
+                    // Display QR code
+                    const qrImg = document.getElementById('qr-code-img');
+                    qrImg.src = data.qr_code_url;
+                    qrImg.style.display = 'block';
+                    document.getElementById('qr-loading').style.display = 'none';
+                    
+                    // Change button to redirect to verify
+                    submitBtn.innerHTML = '✓ Ready to Verify →';
+                    submitBtn.disabled = false;
+                    submitBtn.onclick = (e) => {
+                        e.preventDefault();
+                        const params = new URLSearchParams(window.location.search);
+                        const next = params.get('next');
+                        window.location.href = next ? `/2fa/verify?next=${encodeURIComponent(next)}` : '/2fa/verify';
+                    };
+                } else {
+                    alert(data.error || 'Setup failed');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '✓ Continue to Verification';
+                }
+            } catch (err) {
+                console.error('Setup error:', err);
+                alert('Network error. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '✓ Continue to Verification';
+            }
+        }
+
+        function copySecret(btn) {
+            const secret = document.getElementById('secretDisplay').textContent;
+            navigator.clipboard.writeText(secret).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+
+        // Initialize on page load - fetch secret and QR code
+        document.addEventListener('DOMContentLoaded', () => {
+            handleSetup(new Event('submit'));
+        });
+    </script>
+</body>
+</html>
