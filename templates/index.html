@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="Offline-capable maize disease diagnosis and market intelligence for farmers.">
+    <title>KilimoSmart – Maize MVP</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌽</text></svg>">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2310b981' width='192' height='192'/><text x='50%' y='50%' font-size='120' dominant-baseline='middle' text-anchor='middle' fill='white'>🌽</text></svg>">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/agro-weather-widget.css">
+    <link rel="stylesheet" href="/static/css/scan-history-dashboard.css">
+    <link rel="stylesheet" href="/static/css/yield-chart.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Register Service Worker for PWA offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/js/sw.js')
+                    .then((reg) => {
+                        console.log('[App] ✅ Service Worker registered:', reg);
+                        // Optional: Notify user of offline capability
+                        document.dispatchEvent(new Event('pwa-ready'));
+                    })
+                    .catch((err) => {
+                        console.warn('[App] Service Worker registration failed:', err);
+                    });
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- ═══════════ SIDEBAR ═══════════ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🌱</span>
+                <div>
+                    <h1 class="logo-text">KilimoSmart</h1>
+                    <span class="logo-sub">Maize MVP</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p class="nav-label">MENU</p>
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">🌱</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="diagnose">
+                <span class="nav-icon">🔬</span>
+                <span>Diagnose Crop</span>
+            </a>
+            <a href="#" class="nav-item" data-page="market">
+                <span class="nav-icon">📊</span>
+                <span>Market Prices</span>
+            </a>
+            <a href="#" class="nav-item" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span>Farmer Profile</span>
+            </a>
+            <a href="#" class="nav-item" data-page="history">
+                <span class="nav-icon">📋</span>
+                <span>Scan History</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p class="nav-label">FARMER PROFILE</p>
+            <div class="farmer-card">
+                <div class="farmer-avatar">
+                    <img id="sidebarAvatarImg" class="avatar-img" src="" alt="Farmer profile photo" style="display:none">
+                    <span id="sidebarAvatarFallback" class="avatar-fallback">👨‍🌾</span>
+                </div>
+                <div>
+                    <p class="farmer-name" id="farmerName">John Kamau</p>
+                    <p class="farmer-county" id="farmerCounty">Kiambu County</p>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()" title="Sign out">
+                <span>🚪</span>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ═══════════ MOBILE HEADER ═══════════ -->
+    <header class="mobile-header" id="mobileHeader">
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()">☰</button>
+        <div class="mobile-logo">
+            <span class="logo-icon">🌱</span>
+            <span class="logo-text">KilimoSmart</span>
+        </div>
+    </header>
+
+    <!-- ═══════════ MAIN CONTENT ═══════════ -->
+    <main class="main-content" id="mainContent">
+        <!-- Top bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="page-icon">📋</span>
+                <span class="page-title" id="pageTitle">KilimoSmart</span>
+            </div>
+        </div>
+
+        <!-- ═══════════ DASHBOARD PAGE ═══════════ -->
+        <section class="page active" id="page-dashboard">
+            <div class="hero-banner">
+                <div class="hero-content">
+                    <h2>Welcome, Farmer 👋</h2>
+                    <p>Diagnose your maize, find the best prices, get paid instantly.</p>
+                </div>
+            </div>
+
+            <!-- Weather Intelligence Widget -->
+            <div id="agro-weather-widget" style="margin-bottom: 24px;"></div>
+
+            <!-- Yield Analytics Chart (replaced static stat cards) -->
+            <div class="yield-chart-controls">
+                <label>📊 Farm Analytics</label>
+                <div class="yield-chart-actions">
+                    <button class="yield-chart-btn" onclick="window.yieldChart?.exportImage()" title="Export chart as PNG">
+                        📥 Export
+                    </button>
+                    <button class="yield-chart-btn secondary" onclick="window.yieldChart?.loadFromAPI()" title="Refresh data from server">
+                        🔄 Refresh
+                    </button>
+                </div>
+            </div>
+            <div id="yield-chart-container"></div>
+
+            <!-- Quick Stat Cards (optional, kept for reference) -->
+            <div class="stats-grid" style="margin-top: 24px;">
+                <div class="stat-card">
+                    <div class="stat-icon green">🌱</div>
+                    <div class="stat-value" id="statAcres">5 Acres</div>
+                    <div class="stat-label" id="statLocation">Kiambu</div>
+                </div>
+                <div class="stat-card clickable" onclick="navigateTo('diagnose')">
+                    <div class="stat-icon blue">🔬</div>
+                    <div class="stat-value" id="statScans">0 Scans</div>
+                    <div class="stat-label">Diagnose Crop</div>
+                </div>
+                <div class="stat-card clickable" onclick="navigateTo('market')">
+                    <div class="stat-icon gold">📈</div>
+                    <div class="stat-value" id="statPrice">KES 42/kg</div>
+                    <div class="stat-label">Market Prices</div>
+                </div>
+            </div>
+
+            <!-- Quick Scan Section -->
+            <div class="section-card">
+                <h3>🔬 Scan Your Crop</h3>
+                    <div class="scan-area" id="dashScanArea">
+                        <div class="scan-placeholder">
+                            <div class="scan-icon">📷</div>
+                            <p>Use your laptop camera for live maize leaf analysis<br>or upload an image from your files.</p>
+                        </div>
+                        <div class="scan-buttons">
+                            <button class="btn btn-primary" id="dashCameraBtn" onclick="goToLiveScan()">
+                                <span>📷</span> Live Camera
+                            </button>
+                            <label class="btn btn-secondary">
+                                <span>⬆️</span> Upload Image
+                                <input type="file" accept="image/*" 
+                                       id="dashUploadInput" style="display:none" 
+                                       onchange="handleImageUpload(this, 'dashboard')">
+                            </label>
+                        </div>
+                    </div>
+            </div>
+
+            <!-- Recent Results -->
+            <div class="section-card" id="dashResults" style="display:none">
+                <h3>📋 Latest Diagnosis</h3>
+                <div id="dashResultContent"></div>
+            </div>
+        </section>
+
+        <!-- ═══════════ DIAGNOSE PAGE ═══════════ -->
+        <section class="page" id="page-diagnose">
+            <div class="page-header">
+                <h2>🔬 Diagnose Your Crop</h2>
+                <p>Upload or take a photo of your maize leaf to get an instant AI-powered diagnosis.</p>
+            </div>
+
+            <div class="diagnose-layout">
+                <div class="section-card upload-card">
+                    <h3>Upload or Use Live Camera</h3>
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <div class="upload-icon">📷</div>
+                            <p>Drag & drop your image here or click to browse</p>
+                            <span class="upload-hint">Supports JPG, PNG (max 10 MB)</span>
+                        </div>
+                        <img id="previewImage" class="preview-image" style="display:none" alt="Preview">
+                        <input type="file" accept="image/*" id="diagnoseFileInput" 
+                               style="display:none" onchange="handleImageUpload(this, 'diagnose')">
+                    </div>
+                    <div class="upload-actions">
+                        <label class="btn btn-primary" style="flex:1">
+                            <span>📷</span> Take Photo
+                            <input type="file" accept="image/*" capture="environment" 
+                                   id="diagnoseCameraInput" style="display:none" 
+                                   onchange="handleImageUpload(this, 'diagnose')">
+                        </label>
+                        <label class="btn btn-secondary" style="flex:1" onclick="document.getElementById('diagnoseFileInput').click()">
+                            <span>⬆️</span> Upload Image
+                        </label>
+                    </div>
+                    <button class="btn btn-accent full-width" id="analyzeBtn" 
+                            onclick="analyzeCrop()" disabled>
+                        🔬 Analyze Crop
+                    </button>
+                    <div id="diagnoseProgress" class="detect-progress" style="display:none">
+                        <div class="detect-label">Detecting issues in your maize leaf…</div>
+                        <div class="detect-bar">
+                            <div class="detect-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live camera preview for laptops -->
+                <div class="section-card" id="liveCameraCard">
+                    <h3>🎥 Live Camera (Laptop)</h3>
+                    <p class="text-muted mb-12">
+                        Turn on your laptop camera, point it at a single maize leaf, and let the AI analyze live frames.
+                    </p>
+                    <div class="scan-area">
+                        <video id="liveVideo" class="preview-image" autoplay playsinline muted></video>
+                        <canvas id="liveCanvas" style="display:none;"></canvas>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn btn-primary" id="startLiveBtn" onclick="startLiveScan()">
+                            ▶️ Start Live Scan
+                        </button>
+                        <button class="btn btn-outline" id="stopLiveBtn" onclick="stopLiveScan()" disabled>
+                            ⏹ Stop
+                        </button>
+                    </div>
+                    <p class="text-muted mt-16" id="liveStatus"></p>
+                </div>
+
+                <div class="section-card result-card" id="diagnoseResults" style="display:none">
+                    <h3>📋 Diagnosis Results</h3>
+                    <div id="diagnoseResultContent"></div>
+                    <div class="report-actions" id="diagnoseReportActions" style="display:none">
+                        <button class="btn btn-outline" onclick="printAnalysisReport()">🖨 Print Report</button>
+                    </div>
+                </div>
+
+                <!-- Market offer shown inline after diagnosis -->
+                <div class="section-card" id="diagnoseMarketOffer" style="display:none">
+                    <h3>🤝 Market Offer</h3>
+                    <div id="diagnoseMarketOfferContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ MARKET PAGE ═══════════ -->
+        <section class="page" id="page-market">
+            <div class="page-header">
+                <h2>📊 Market Prices & Millers</h2>
+                <p>Find the best prices and nearest millers for your maize.</p>
+            </div>
+
+            <div class="market-layout">
+                <div class="section-card">
+                    <h3>📍 Your Location</h3>
+                    <div class="location-row">
+                        <button class="btn btn-primary" onclick="detectLocation()">
+                            📍 Detect My Location
+                        </button>
+                        <select id="countySelect" class="county-select" onchange="updateCounty()">
+                            <option value="">Select County...</option>
+                            <option value="Kiambu">Kiambu</option>
+                            <option value="Uasin Gishu">Uasin Gishu</option>
+                            <option value="Trans-Nzoia">Trans-Nzoia</option>
+                            <option value="Nakuru">Nakuru</option>
+                            <option value="Bungoma">Bungoma</option>
+                            <option value="Kakamega">Kakamega</option>
+                        </select>
+                    </div>
+                    <p class="location-status" id="locationStatus">📍 Location: Kiambu (default)</p>
+                </div>
+
+                <div class="section-card">
+                    <h3>🏭 Nearest Millers</h3>
+                    <div id="millersGrid" class="millers-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Market Offer (after diagnosis) -->
+                <div class="section-card" id="marketOffer" style="display:none">
+                    <h3>🤝 Your Market Offer</h3>
+                    <div id="marketOfferContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ PROFILE PAGE ═══════════ -->
+        <section class="page" id="page-profile">
+            <div class="page-header">
+                <h2>👤 Farmer Profile</h2>
+                <p>Manage your farm details and preferences.</p>
+            </div>
+
+            <div class="profile-layout">
+                <div class="section-card profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar-lg">
+                            <img id="profileAvatarImg" class="avatar-img" src="" alt="Farmer profile photo" style="display:none">
+                            <span id="profileAvatarFallback" class="avatar-fallback">👨‍🌾</span>
+                        </div>
+                        <div>
+                            <h3 id="profileName">John Kamau</h3>
+                            <p class="text-muted" id="profileCounty">Kiambu County</p>
+                        </div>
+                    </div>
+                    <div class="profile-photo-actions">
+                        <label class="btn btn-secondary" for="profilePhotoInput">
+                            <span>🖼️</span> Upload Photo
+                        </label>
+                        <input type="file" id="profilePhotoInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="uploadProfilePhoto(this)">
+                    </div>
+                    <div class="profile-fields">
+                        <div class="field-group">
+                            <label>Full Name</label>
+                            <input type="text" id="inputName" value="John Kamau" 
+                                   onchange="updateProfile()">
+                        </div>
+                        <div class="field-group">
+                            <label>County</label>
+                            <select id="inputCounty" onchange="updateProfile()">
+                                <option value="Kiambu" selected>Kiambu</option>
+                                <option value="Uasin Gishu">Uasin Gishu</option>
+                                <option value="Trans-Nzoia">Trans-Nzoia</option>
+                                <option value="Nakuru">Nakuru</option>
+                                <option value="Bungoma">Bungoma</option>
+                                <option value="Kakamega">Kakamega</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Farm Size (Acres)</label>
+                            <input type="number" id="inputAcres" value="5" min="1" 
+                                   onchange="updateProfile()">
+                        </div>
+                        <div class="field-group">
+                            <label>Phone (M-Pesa)</label>
+                            <input type="tel" id="inputPhone" value="+254 712 345 678" 
+                                   placeholder="+254...">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary full-width" onclick="saveProfile()">
+                        💾 Save Profile
+                    </button>
+                </div>
+
+                <div class="section-card">
+                    <h3>📊 Farm Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-label">Total Scans</span>
+                            <span class="summary-value" id="summaryScans">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Diseases Found</span>
+                            <span class="summary-value" id="summaryDiseases">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Healthy Crops</span>
+                            <span class="summary-value" id="summaryHealthy">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Best Price Offered</span>
+                            <span class="summary-value" id="summaryBestPrice">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3>⚙️ Settings</h3>
+                    <div class="settings-list">
+                        <div class="setting-row">
+                            <span>Language</span>
+                            <select id="settingsLang" onchange="setLanguage(this.value)">
+                                <option value="en">English</option>
+                                <option value="sw">Kiswahili</option>
+                            </select>
+                        </div>
+                        <div class="setting-row">
+                            <span>Notifications</span>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ SCAN HISTORY PAGE ═══════════ -->
+        <section class="page" id="page-history">
+            <div class="page-header">
+                <h2>📋 Scan History</h2>
+                <p>View all your past maize diagnoses, filter by disease or date, and export your records.</p>
+            </div>
+
+            <div id="scan-history-dashboard" class="scan-history-container"></div>
+        </section>
+    </main>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Loading spinner -->
+    <div class="loading-overlay" id="loadingOverlay" style="display:none">
+        <div class="spinner"></div>
+        <p>Analyzing your maize image…</p>
+    </div>
+
+    <!-- Report markup injected at print time -->
+    <section id="printReportRoot" style="display:none"></section>
+
+    <!-- Offline data storage -->
+    <script src="/static/js/offline-db.js"></script>
+    
+    <!-- Weather data service utility -->
+    <script src="/static/js/weather-data-service.js"></script>
+
+    <!-- Agro Weather Widget -->
+    <script src="/static/js/agro-weather-widget.js"></script>
+
+    <!-- Scan History Dashboard -->
+    <script src="/static/js/scan-history-dashboard.js"></script>
+
+    <!-- Yield Chart (Apache ECharts) -->
+    <script src="/static/js/yield-chart.js"></script>
+    
+    <!-- Main app -->
+    <script src="/static/js/app.js"></script>
+    
+    <!-- Initialization -->
+    <script>
+        // Notify app when PWA is ready
+        document.addEventListener('pwa-ready', () => {
+            console.log('[App] PWA Service Worker active');
+        });
+
+        // Notify app when offline storage is ready
+        document.addEventListener('offline-db-ready', () => {
+            console.log('[App] Offline database ready - scans will persist locally');
+        });
+
+        // Monitor connection status
+        window.addEventListener('online', () => {
+            console.log('[App] 🟢 Back online - attempting to sync data');
+            if (window.offlineDB) {
+                window.offlineDB.getUnsyncedScans().then(scans => {
+                    if (scans.length > 0) {
+                        console.log(`[App] Syncing ${scans.length} offline scans...`);
+                        // TODO: Implement sync logic in Phase 2
+                    }
+                });
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('[App] 🔴 Offline - app will use cached data');
+        });
+
+        // Show offline indicator on init if needed
+        if (!navigator.onLine) {
+            console.log('[App] Started while offline');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#16a34a">
+    <meta name="description" content="Secure login for KilimoSmart – Maize Intelligence Platform.">
+    <title>Sign in – KilimoSmart</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌽</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .fl-group input::placeholder {
+            color: transparent;
+        }
+        .fl-group input:-ms-input-placeholder {
+            color: transparent;
+        }
+        .fl-group input::-ms-input-placeholder {
+            color: transparent;
+        }
+        .spin {
+            border-top-color: rgba(22, 163, 74, 1);
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#f9f5ee] flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-8 rounded-3xl bg-[#fdfaf4] shadow-[0_24px_80px_rgba(15,23,42,0.16)] border border-[#e5ddcf] overflow-hidden">
+        <!-- Left: Form -->
+        <div class="px-6 sm:px-10 py-8 sm:py-10">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="h-11 w-11 rounded-2xl bg-gradient-to-tr from-[#2f7f4f] to-[#9ecf4e] flex items-center justify-center shadow-inner">
+                    <span class="text-2xl">🌽</span>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-[0.22em] text-emerald-700/80">
+                        KilimoSmart
+                    </p>
+                    <p class="text-xs text-slate-500">
+                        Maize Intelligence Platform
+                    </p>
+                </div>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 mb-1">
+                Welcome back, farmer
+            </h1>
+            <p class="text-sm text-slate-600 mb-6 sm:mb-8 max-w-md">
+                Sign in to access maize disease diagnosis, market prices and agro‑weather in one secure place.
+            </p>
+
+            <!-- Global error (server-rendered) -->
+            {% if error %}
+            <div id="globalError" class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs text-red-700 flex items-start gap-2">
+                <span class="mt-0.5 text-sm">⚠</span>
+                <div>
+                    <p class="font-medium">We couldn’t sign you in.</p>
+                    <p>{{ error }}</p>
+                </div>
+            </div>
+            {% else %}
+            <div id="globalError"></div>
+            {% endif %}
+
+            <form id="loginForm" method="POST" class="space-y-4" onsubmit="handleLogin(event)">
+                <!-- Demo hint -->
+                <div class="rounded-2xl border border-amber-200/80 bg-amber-50/70 px-3.5 py-2.5 text-[11px] text-amber-900 flex items-start gap-2">
+                    <span class="mt-0.5 text-sm">🔓</span>
+                    <div>
+                        <p class="font-semibold">Quick demo account</p>
+                        <p>
+                            Use <span class="font-mono px-1.5 py-0.5 rounded bg-amber-100/80 border border-amber-200 text-[10px]">demo@kilimosmart.local</span>
+                            and <span class="font-mono px-1.5 py-0.5 rounded bg-amber-100/80 border border-amber-200 text-[10px]">demo123</span>
+                            or tap <button type="button" onclick="loginAsDemo()" class="underline underline-offset-2 font-medium">Demo mode</button>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="fl-group relative">
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autocomplete="email"
+                        required
+                        autofocus
+                        placeholder="Email address"
+                        class="peer block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 pt-4 pb-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                    >
+                    <label
+                        for="email"
+                        class="pointer-events-none absolute left-3.5 top-3.5 text-sm text-slate-400 transition-all
+                               peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-emerald-700
+                               peer-valid:top-2.5 peer-valid:text-[11px] peer-valid:text-slate-500">
+                        Email address
+                    </label>
+                </div>
+
+                <!-- Password -->
+                <div class="fl-group relative">
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Password"
+                        class="peer block w-full rounded-2xl border border-slate-200 bg-white/80 px-3.5 pt-4 pb-2.5 text-sm text-slate-900 shadow-sm outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                    >
+                    <label
+                        for="password"
+                        class="pointer-events-none absolute left-3.5 top-3.5 text-sm text-slate-400 transition-all
+                               peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-emerald-700
+                               peer-valid:top-2.5 peer-valid:text-[11px] peer-valid:text-slate-500">
+                        Password
+                    </label>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-slate-600 mt-1">
+                    <label class="inline-flex items-center gap-2">
+                        <input
+                            id="remember_me"
+                            name="remember_me"
+                            type="checkbox"
+                            class="h-3.5 w-3.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        >
+                        <span>Keep me signed in</span>
+                    </label>
+                    <a href="/forgot-password" class="text-emerald-700 hover:text-emerald-800 font-medium underline underline-offset-2">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <button
+                    type="submit"
+                    id="submitBtn"
+                    class="mt-3 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-600 to-lime-500 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdfaf4] transition-all"
+                >
+                    Sign in
+                </button>
+
+                <button
+                    type="button"
+                    onclick="loginAsDemo()"
+                    class="w-full mt-1 inline-flex items-center justify-center rounded-2xl border border-amber-200/90 bg-amber-50/70 px-4 py-2 text-xs font-medium text-amber-900 hover:bg-amber-50 transition-colors"
+                >
+                    Continue in demo mode
+                </button>
+
+                <p class="pt-3 text-xs text-slate-600 text-center">
+                    New to KilimoSmart?
+                    <a href="/register" class="font-medium text-emerald-700 hover:text-emerald-800">
+                        Create an account
+                    </a>
+                </p>
+            </form>
+        </div>
+
+        <!-- Right: Brand / Demo -->
+        <aside class="hidden md:flex flex-col justify-between bg-gradient-to-br from-[#16361f] via-[#20472a] to-[#2e5d37] text-[#f5f0e4] px-8 py-9 relative">
+            <div class="absolute inset-0 opacity-[0.12] pointer-events-none mix-blend-soft-light bg-[radial-gradient(circle_at_top,_#f6e4b1_0,_transparent_55%),_radial-gradient(circle_at_bottom,_#a6d57b_0,_transparent_60%)]"></div>
+            <div class="relative">
+                <p class="text-[10px] font-medium uppercase tracking-[0.22em] text-emerald-50/70 mb-3">
+                    Smarter maize decisions
+                </p>
+                <h2 class="text-lg font-semibold leading-snug mb-3">
+                    Diagnose, protect and sell your harvest with confidence.
+                </h2>
+                <p class="text-xs text-emerald-50/85 mb-6 max-w-sm">
+                    KilimoSmart combines AI disease diagnosis, local millers, price negotiation and agro‑weather into a single secure dashboard for farmers and cooperatives.
+                </p>
+
+                <button
+                    type="button"
+                    onclick="loginAsDemo()"
+                    class="inline-flex items-center gap-2 rounded-full bg-emerald-50/10 border border-emerald-100/40 px-4 py-2 text-[11px] font-medium text-emerald-50 hover:bg-emerald-50/15 hover:border-emerald-100/70 transition-colors"
+                >
+                    <span class="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    Try demo mode (no signup)
+                </button>
+            </div>
+
+            <div class="relative mt-10 space-y-3 text-[11px] text-emerald-50/85">
+                <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-900/40 flex items-center justify-center text-[11px]">
+                        ✓
+                    </div>
+                    <p>Two‑step protection with secure authenticator codes.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-900/40 flex items-center justify-center text-[11px]">
+                        ✓
+                    </div>
+                    <p>Optimized for low‑bandwidth rural connectivity.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="h-6 w-6 rounded-full bg-emerald-900/40 flex items-center justify-center text-[11px]">
+                        ✓
+                    </div>
+                    <p>Trusted by farmer groups and local millers.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        function setGlobalError(message) {
+            const container = document.getElementById('globalError');
+            if (!message) {
+                container.innerHTML = '';
+                return;
+            }
+            container.innerHTML = `
+                <div class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs text-red-700 flex items-start gap-2">
+                    <span class="mt-0.5 text-sm">⚠</span>
+                    <div>
+                        <p class="font-medium">We couldn’t sign you in.</p>
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function performLogin(payload) {
+            const form = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const rememberMe = document.getElementById('remember_me');
+            setGlobalError(null);
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="inline-block h-3.5 w-3.5 rounded-full border border-slate-200 border-t-emerald-500 spin mr-2 align-middle"></span>
+                Signing in…
+            `;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({...payload, remember_me: rememberMe.checked}),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = data.redirect || '/';
+                } else {
+                    setGlobalError(data.error || 'Incorrect email or password. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign in';
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                setGlobalError('Network error. Please check your connection and try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign in';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            performLogin({ email, password });
+        }
+
+        function loginAsDemo() {
+            performLogin({
+                email: 'demo@kilimosmart.local',
+                password: 'demo123'
+            });
+        }
+    </script>
+</body>
+</html>

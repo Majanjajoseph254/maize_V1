@@ -1,0 +1,22 @@
+{
+    "Common Rust": {
+        "sw_name": "Kutu ya Majani",
+        "medication": "Amistar Top / Absolute 375SC",
+        "prevention": "Use resistant varieties; destroy volunteer plants."
+    },
+    "Northern Leaf Blight": {
+        "sw_name": "Homa ya Majani",
+        "medication": "Ortiva Top / Milestone 250SC",
+        "prevention": "Crop rotation for at least 2 years."
+    },
+    "Gray Leaf Spot": {
+        "sw_name": "Madoa ya Kijivu",
+        "medication": "Cherokee 487.5SE / Absolute Star",
+        "prevention": "Manage residue from previous harvest."
+    },
+    "Healthy": {
+        "sw_name": "Mzima",
+        "medication": "None required / Hakuna",
+        "prevention": "Keep monitoring regularly."
+    }
+}

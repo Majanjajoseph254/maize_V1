@@ -1,0 +1,191 @@
+/**
+ * Yield Chart Styles
+ * ==================
+ * Dark mode themed chart container with neon accents
+ */
+
+#yield-chart-container {
+    width: 100%;
+    height: 500px;
+    background: linear-gradient(135deg, #0F1419 0%, #1A1F2E 100%);
+    border: 2px solid #1E2A3A;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 255, 68, 0.08), 0 0 20px rgba(0, 0, 0, 0.4);
+    margin: 20px 0;
+    position: relative;
+}
+
+/* Neon glow effect on hover */
+#yield-chart-container:hover {
+    border-color: #00FF44;
+    box-shadow: 0 4px 20px rgba(0, 255, 68, 0.15), 0 0 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Chart controls toolbar */
+.yield-chart-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: rgba(15, 20, 25, 0.8);
+    border: 1px solid #222;
+    border-radius: 8px;
+}
+
+.yield-chart-controls label {
+    color: #AAA;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.yield-chart-controls select {
+    padding: 8px 12px;
+    background: #1A1F2E;
+    color: #00FF44;
+    border: 1px solid #333;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.yield-chart-controls select:hover {
+    border-color: #00FF44;
+    box-shadow: 0 0 8px rgba(0, 255, 68, 0.3);
+}
+
+.yield-chart-controls select:focus {
+    outline: none;
+    border-color: #00FF44;
+    box-shadow: 0 0 12px rgba(0, 255, 68, 0.4);
+}
+
+/* Export & refresh buttons */
+.yield-chart-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.yield-chart-btn {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #00FF44, #00CC35);
+    color: #000000;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.yield-chart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 68, 0.3);
+}
+
+.yield-chart-btn:active {
+    transform: translateY(0);
+}
+
+.yield-chart-btn.secondary {
+    background: linear-gradient(135deg, #FF6600, #FF5500);
+    color: #FFFFFF;
+}
+
+.yield-chart-btn.secondary:hover {
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #yield-chart-container {
+        height: 350px;
+    }
+
+    .yield-chart-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .yield-chart-controls select {
+        width: 100%;
+    }
+
+    .yield-chart-actions {
+        width: 100%;
+    }
+
+    .yield-chart-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    #yield-chart-container {
+        height: 280px;
+        border-radius: 8px;
+        margin: 12px 0;
+    }
+
+    .yield-chart-controls {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .yield-chart-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Chart glow animation */
+@keyframes neon-glow {
+    0%, 100% {
+        box-shadow: 0 4px 16px rgba(0, 255, 68, 0.08), 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(0, 255, 68, 0.15), 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+}
+
+#yield-chart-container.animating {
+    animation: neon-glow 2s ease-in-out infinite;
+}
+
+/* Dark mode accessibility */
+@media (prefers-color-scheme: dark) {
+    #yield-chart-container {
+        background: linear-gradient(135deg, #0A0E19 0%, #15192A 100%);
+        border-color: #1A2435;
+    }
+}
+
+@media (prefers-contrast: more) {
+    #yield-chart-container {
+        border-width: 3px;
+        box-shadow: 0 0 30px rgba(0, 255, 68, 0.2);
+    }
+
+    .yield-chart-btn {
+        border: 2px solid #00FF44;
+    }
+
+    .yield-chart-btn.secondary {
+        border-color: #FF6600;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #yield-chart-container,
+    .yield-chart-btn {
+        transition: none;
+        animation: none;
+    }
+}
