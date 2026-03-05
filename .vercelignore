@@ -1,0 +1,45 @@
+# Development files
+.git
+.github
+.vscode
+.idea
+__pycache__
+*.pyc
+*.egg-info
+
+# Test files
+test_*.py
+pytest.ini
+.pytest_cache
+.coverage
+htmlcov
+
+# Virtual environments
+venv
+env
+ENV
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Development database
+instance/
+
+# Upload cache (will be regenerated)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Node modules (npm doesn't apply)
+node_modules
+
+# Documentation and logs
+*.log
+*.md
+docs/
